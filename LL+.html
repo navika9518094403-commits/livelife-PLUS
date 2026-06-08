@@ -1,0 +1,1014 @@
+
+cat > /home/claude/livelifeplus_new.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LL+ · Live Life Plus</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════
+   ROOT & RESET
+═══════════════════════════════════════ */
+:root{
+  --ink:#0a0a0f; --ink2:#16161f; --ink3:#22222f;
+  --sage:#3d7a5e; --sage-l:#5eab84; --sage-pale:#c8f0da;
+  --ember:#e85d3a; --gold:#f0a832; --blush:#ff6b8a;
+  --cream:#faf6ee; --mist:#f2f0ec; --cloud:#e8e5df;
+  --txt-dim:rgba(255,255,255,.38); --txt-mid:rgba(255,255,255,.62);
+  --r-xl:28px; --r-xxl:40px;
+  --shadow-soft:0 12px 48px rgba(0,0,0,.08);
+  --shadow-lift:0 24px 80px rgba(0,0,0,.16);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;}
+::selection{background:var(--sage-pale);color:var(--sage);}
+
+/* ═══════════════════════════════════════
+   SCREEN SYSTEM (intro flow)
+═══════════════════════════════════════ */
+.screen{position:fixed;inset:0;z-index:9000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .65s cubic-bezier(.4,0,.2,1),visibility .65s;}
+.screen.off{opacity:0;visibility:hidden;pointer-events:none;}
+
+/* ─ CHOICE SCREEN ─ */
+#sc-choice{background:var(--ink);}
+.choice-noise{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;}
+.choice-glow{position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(94,171,132,.1) 0%,transparent 70%);border-radius:50%;pointer-events:none;animation:glowpulse 4s ease-in-out infinite;}
+@keyframes glowpulse{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.15);opacity:1}}
+.choice-brand{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;letter-spacing:6px;text-transform:uppercase;color:var(--txt-dim);margin-bottom:56px;animation:fadeUp .8s .1s both;}
+.choice-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,6vw,58px);font-weight:700;color:#fff;text-align:center;line-height:1.1;margin-bottom:18px;animation:fadeUp .8s .25s both;}
+.choice-sub{font-size:16px;color:var(--txt-dim);text-align:center;margin-bottom:72px;letter-spacing:.5px;animation:fadeUp .8s .4s both;}
+.choice-cards{display:flex;gap:32px;animation:fadeUp .9s .55s both;}
+.c-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-xxl);padding:44px 40px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:22px;transition:background .3s,border-color .3s,transform .25s;min-width:200px;}
+.c-card:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.22);transform:translateY(-6px);}
+.c-card-icon{font-size:80px;line-height:1;}
+.c-card-label{font-size:13px;letter-spacing:3px;text-transform:uppercase;font-weight:600;color:var(--txt-dim);}
+.c-card-desc{font-size:15px;color:rgba(255,255,255,.5);text-align:center;line-height:1.6;max-width:160px;}
+.c-card.primary{border-color:rgba(94,171,132,.35);}
+.c-card.primary:hover{border-color:rgba(94,171,132,.65);background:rgba(94,171,132,.06);}
+.c-or{font-size:13px;letter-spacing:3px;color:rgba(255,255,255,.18);text-transform:uppercase;align-self:center;}
+
+/* ─ WRONG SCREEN ─ */
+#sc-wrong{background:radial-gradient(ellipse at 50% 40%,#1c0a06 0%,var(--ink) 100%);}
+.wrong-big{font-size:96px;margin-bottom:28px;}
+.wrong-h{font-family:'Cormorant Garamond',serif;font-size:clamp(30px,5vw,46px);font-weight:700;color:#fff;text-align:center;max-width:480px;line-height:1.15;margin-bottom:14px;}
+.wrong-p{font-size:17px;color:var(--txt-mid);text-align:center;max-width:380px;line-height:1.8;margin-bottom:48px;}
+.btn-ghost-red{background:none;border:1.5px solid rgba(232,93,58,.5);color:rgba(255,255,255,.85);padding:16px 48px;border-radius:50px;font-size:16px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .3s;letter-spacing:.3px;}
+.btn-ghost-red:hover{border-color:var(--ember);background:rgba(232,93,58,.1);}
+
+/* ─ RED HEART SCREEN ─ */
+#sc-red{background:radial-gradient(ellipse at 50% 35%,#1a0005 0%,var(--ink) 100%);}
+.rh-label{font-size:12px;letter-spacing:5px;text-transform:uppercase;color:var(--txt-dim);margin-bottom:48px;animation:fadeUp 1s .3s both;}
+/* floating pain chips */
+.pain-chip{position:fixed;font-size:14px;font-weight:500;padding:7px 15px;border-radius:99px;white-space:nowrap;pointer-events:none;z-index:9001;animation:chipDrift linear infinite;}
+@keyframes chipDrift{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-12px) rotate(1.5deg)}}
+.pc-red{color:rgba(255,100,100,.9);background:rgba(180,20,20,.15);border:1px solid rgba(200,60,60,.25);}
+.pc-blue{color:rgba(130,160,255,.9);background:rgba(30,50,140,.18);border:1px solid rgba(90,110,200,.25);}
+.pc-purple{color:rgba(200,140,255,.9);background:rgba(90,30,150,.18);border:1px solid rgba(150,70,220,.25);}
+.pc-teal{color:rgba(110,210,170,.8);background:rgba(20,90,60,.18);border:1px solid rgba(60,140,100,.25);}
+.pc1{top:6%;left:3%;animation-duration:9s;} .pc2{top:10%;right:6%;animation-duration:11s;animation-delay:-2s;}
+.pc3{top:20%;left:15%;animation-duration:8s;animation-delay:-4s;} .pc4{top:16%;right:22%;animation-duration:10s;animation-delay:-1s;}
+.pc5{top:36%;left:2%;animation-duration:12s;animation-delay:-3s;} .pc6{top:33%;right:3%;animation-duration:9.5s;animation-delay:-5s;}
+.pc7{top:53%;left:10%;animation-duration:10s;animation-delay:-2s;} .pc8{top:50%;right:12%;animation-duration:8.5s;animation-delay:-6s;}
+.pc9{top:66%;left:4%;animation-duration:11s;animation-delay:-1s;} .pc10{top:70%;right:6%;animation-duration:9s;animation-delay:-4s;}
+.pc11{top:80%;left:18%;animation-duration:10s;animation-delay:-3s;} .pc12{top:83%;right:20%;animation-duration:8s;animation-delay:-5s;}
+/* heart stage */
+.rh-stage{position:relative;width:200px;height:200px;display:flex;align-items:center;justify-content:center;z-index:9002;animation:fadeUp 1s .5s both;}
+.rh-aura{position:absolute;inset:-32px;border-radius:50%;background:radial-gradient(circle,rgba(200,20,50,.16) 0%,transparent 65%);animation:auraPulse 2.2s ease-in-out infinite;}
+@keyframes auraPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.28)}}
+.rh-svg{width:148px;height:148px;filter:drop-shadow(0 0 28px rgba(200,20,50,.65)) drop-shadow(0 0 8px rgba(200,20,50,.4));}
+.pin-ring{position:absolute;bottom:-18px;right:-18px;width:54px;height:54px;background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.2);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:24px;z-index:9003;transition:all .2s;animation:pinWiggle 2.8s ease-in-out infinite;}
+.pin-ring:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.4);transform:scale(1.12);}
+@keyframes pinWiggle{0%,100%{transform:rotate(-12deg) scale(1)}50%{transform:rotate(12deg) scale(1.06)}}
+.rh-cue{font-size:18px;color:rgba(255,255,255,.4);letter-spacing:2px;margin-top:36px;animation:fadeUp 1s 1.2s both;font-weight:400;z-index:9002;position:relative;}
+/* burst */
+.burst-wrap{position:fixed;top:50%;left:50%;pointer-events:none;z-index:9010;}
+.b-dot{position:absolute;border-radius:50%;transform-origin:0 0;animation:bOut .55s cubic-bezier(.2,.8,.3,1) forwards;}
+@keyframes bOut{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--bx),var(--by)) scale(0)}}
+
+/* ─ GREEN HEART SCREEN ─ */
+#sc-green{background:radial-gradient(ellipse at 50% 35%,#00150a 0%,var(--ink) 100%);}
+.gh-label{font-size:12px;letter-spacing:5px;text-transform:uppercase;color:rgba(94,171,132,.55);margin-bottom:40px;animation:fadeUp 1s .2s both;}
+/* good chips */
+.good-chip{position:fixed;font-size:14px;font-weight:500;color:rgba(90,240,170,.9);background:rgba(40,180,100,.08);border:1px solid rgba(70,200,120,.25);padding:7px 15px;border-radius:99px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .7s ease;z-index:9001;}
+.gc1{top:7%;left:4%;} .gc2{top:11%;right:7%;} .gc3{top:21%;left:16%;} .gc4{top:17%;right:23%;}
+.gc5{top:37%;left:2%;} .gc6{top:34%;right:3%;} .gc7{top:54%;left:11%;} .gc8{top:51%;right:13%;}
+.gc9{top:67%;left:5%;} .gc10{top:71%;right:7%;} .gc11{top:81%;left:19%;} .gc12{top:84%;right:21%;}
+/* green heart stage */
+.gh-stage{position:relative;width:200px;height:200px;display:flex;align-items:center;justify-content:center;z-index:9002;animation:fadeUp 1s .4s both;}
+.gh-aura{position:absolute;inset:-32px;border-radius:50%;background:radial-gradient(circle,rgba(60,200,120,.15) 0%,transparent 65%);animation:auraPulse 2.2s ease-in-out infinite;}
+.gh-svg{width:148px;height:148px;filter:drop-shadow(0 0 28px rgba(60,200,120,.6)) drop-shadow(0 0 8px rgba(60,200,120,.3));}
+.gh-msg{z-index:9002;position:relative;text-align:center;margin-top:40px;animation:fadeUp 1s .7s both;}
+.gh-msg h2{font-family:'Cormorant Garamond',serif;font-size:clamp(24px,4vw,36px);font-weight:700;color:#fff;margin-bottom:10px;}
+.gh-msg p{font-size:17px;color:rgba(255,255,255,.48);line-height:1.75;}
+.gh-nudge{font-size:15px;color:rgba(90,240,160,.7);text-align:center;margin-top:20px;min-height:26px;position:relative;z-index:9002;transition:opacity .5s;}
+.gh-cta{margin-top:48px;background:linear-gradient(135deg,rgba(94,171,132,.2),rgba(94,171,132,.08));border:1.5px solid rgba(94,171,132,.45);color:rgba(255,255,255,.9);padding:18px 56px;border-radius:50px;font-size:17px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;position:relative;z-index:9002;animation:fadeUp 1s .9s both,greenGlow 2.5s ease-in-out infinite;transition:all .3s;letter-spacing:.3px;}
+@keyframes greenGlow{0%,100%{box-shadow:0 0 20px rgba(94,171,132,.25)}50%{box-shadow:0 0 44px rgba(94,171,132,.55)}}
+.gh-cta:hover{background:linear-gradient(135deg,rgba(94,171,132,.35),rgba(94,171,132,.15));border-color:rgba(94,171,132,.75);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════════════════════════════════
+   FLOATING DOODLES (main site)
+═══════════════════════════════════════ */
+.f-doodle{position:fixed;font-size:13px;color:rgba(94,171,132,.6);background:rgba(94,171,132,.06);border:1px dashed rgba(94,171,132,.22);padding:6px 14px;border-radius:99px;pointer-events:none;z-index:100;display:none;animation:doodleFloat ease-in-out infinite;}
+@keyframes doodleFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.fd1{top:24%;left:1.5%;animation-duration:7s;} .fd2{top:41%;right:1.5%;animation-duration:9s;animation-delay:-3s;}
+.fd3{top:63%;left:1%;animation-duration:8s;animation-delay:-5s;} .fd4{top:79%;right:1.5%;animation-duration:7.5s;animation-delay:-1.5s;}
+.fd5{top:55%;left:1.5%;animation-duration:10s;animation-delay:-4s;}
+
+/* ═══════════════════════════════════════
+   NAV
+═══════════════════════════════════════ */
+#site-nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:0 48px;height:68px;display:flex;align-items:center;background:rgba(250,246,238,.9);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.06);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--sage);letter-spacing:-1px;}
+.nav-logo sup{font-size:14px;color:var(--ember);vertical-align:super;}
+.nav-spacer{flex:1;}
+.nav-links{display:flex;gap:32px;align-items:center;}
+.nav-links a{font-size:14px;font-weight:500;color:var(--ink);text-decoration:none;opacity:.6;transition:opacity .2s;letter-spacing:.2px;}
+.nav-links a:hover{opacity:1;}
+.nav-cta{background:var(--sage);color:#fff;padding:9px 22px;border-radius:99px;font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .25s;}
+.nav-cta:hover{background:var(--sage-l);transform:translateY(-1px);}
+#lang-btn{background:none;border:1px solid rgba(0,0,0,.15);color:var(--ink);padding:7px 16px;border-radius:99px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;margin-right:12px;transition:all .2s;}
+#lang-btn:hover{border-color:var(--sage);color:var(--sage);}
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+#hero{min-height:100vh;padding:140px 48px 100px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;background:linear-gradient(168deg,var(--ink) 0%,var(--ink2) 48%,#0d2416 100%);overflow:hidden;}
+.hero-orb{position:absolute;border-radius:50%;pointer-events:none;animation:orbFloat 10s ease-in-out infinite;}
+.orb1{width:700px;height:700px;background:radial-gradient(circle,rgba(94,171,132,.08) 0%,transparent 65%);top:-200px;left:-200px;}
+.orb2{width:500px;height:500px;background:radial-gradient(circle,rgba(240,168,50,.07) 0%,transparent 65%);bottom:-150px;right:-100px;animation-delay:4s;}
+.orb3{width:300px;height:300px;background:radial-gradient(circle,rgba(255,107,138,.07) 0%,transparent 65%);top:30%;right:15%;animation-delay:7s;}
+@keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-28px)}}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(94,171,132,.15);border:1px solid rgba(94,171,132,.3);color:var(--sage-l);padding:7px 20px;border-radius:99px;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:32px;animation:fadeUp .8s both;}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(52px,9vw,102px);font-weight:700;color:#fff;line-height:1.0;margin-bottom:28px;animation:fadeUp .8s .15s both;}
+.hero-h1 em{color:var(--sage-l);font-style:italic;}
+.hero-h1 del{color:var(--ember);opacity:.6;text-decoration-color:rgba(232,93,58,.5);}
+.hero-sub{font-size:clamp(16px,2vw,20px);color:rgba(255,255,255,.58);max-width:580px;line-height:1.85;margin-bottom:28px;animation:fadeUp .8s .3s both;}
+.hero-pills{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:48px;animation:fadeUp .8s .45s both;}
+.hero-pill{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);padding:9px 20px;border-radius:99px;font-size:14px;font-weight:500;}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .6s both;}
+.btn-sage{background:linear-gradient(135deg,var(--sage-l),var(--sage));color:#fff;border:none;padding:18px 44px;border-radius:99px;font-size:16px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .28s;box-shadow:0 8px 32px rgba(94,171,132,.35),0 0 0 0 rgba(94,171,132,.3);}
+.btn-sage:hover{transform:translateY(-3px);box-shadow:0 14px 44px rgba(94,171,132,.45);}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.25);padding:18px 44px;border-radius:99px;font-size:16px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .28s;}
+.btn-outline:hover{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.06);}
+/* scroll indicator */
+.hero-scroll{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:.3;animation:fadeUp 1s 1.2s both;}
+.hero-scroll span{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#fff;}
+.scroll-line{width:1px;height:36px;background:linear-gradient(to bottom,#fff,transparent);}
+
+/* ═══════════════════════════════════════
+   SECTIONS — shared
+═══════════════════════════════════════ */
+.s-eyebrow{font-size:12px;font-weight:700;letter-spacing:3.5px;text-transform:uppercase;text-align:center;margin-bottom:16px;}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,5vw,58px);font-weight:700;text-align:center;line-height:1.1;margin-bottom:20px;}
+.s-sub{font-size:17px;line-height:1.85;text-align:center;max-width:580px;margin:0 auto 72px;}
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.vis{opacity:1;transform:translateY(0);}
+
+/* ═══════════════════════════════════════
+   TRANSFORM SECTION
+═══════════════════════════════════════ */
+#transform{padding:120px 48px;background:var(--cream);}
+#transform .s-eyebrow{color:var(--sage);}
+#transform .s-title{color:var(--ink);}
+#transform .s-sub{color:var(--ink);opacity:.55;}
+.t-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:28px;max-width:1160px;margin:0 auto;}
+.t-card{border-radius:var(--r-xxl);overflow:hidden;box-shadow:var(--shadow-soft);transition:transform .3s,box-shadow .3s;}
+.t-card:hover{transform:translateY(-10px);box-shadow:var(--shadow-lift);}
+.tc-before{background:linear-gradient(145deg,#2a0005,#8b1020);padding:32px;color:#fff;}
+.tc-mid{background:#fff;padding:14px 32px;display:flex;align-items:center;justify-content:center;gap:20px;}
+.tc-mid-icon{font-size:20px;} .tc-mid-arrow{color:var(--sage);font-weight:700;font-size:15px;letter-spacing:2px;}
+.tc-after{background:linear-gradient(145deg,#082018,#1e5238);padding:32px;color:#fff;}
+.tc-emoji{font-size:52px;margin-bottom:16px;display:block;}
+.tc-tag{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;opacity:.55;margin-bottom:10px;}
+.tc-h{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;margin-bottom:10px;line-height:1.3;}
+.tc-p{font-size:14px;opacity:.78;line-height:1.7;}
+.tc-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;}
+.tc-chip{font-size:12px;font-weight:600;padding:5px 12px;border-radius:99px;background:rgba(0,0,0,.2);}
+
+/* ═══════════════════════════════════════
+   EFFECTS SECTION
+═══════════════════════════════════════ */
+#effects{padding:120px 48px;background:var(--ink);}
+#effects .s-eyebrow{color:var(--sage-l);}
+#effects .s-title{color:#fff;}
+#effects .s-sub{color:rgba(255,255,255,.5);}
+.e-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;max-width:1160px;margin:0 auto;}
+.e-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-xl);padding:32px 26px;transition:all .3s;cursor:default;}
+.e-card:hover{background:rgba(94,171,132,.08);border-color:rgba(94,171,132,.25);transform:translateY(-5px);}
+.e-icon{font-size:38px;margin-bottom:18px;}
+.e-title{color:#fff;font-weight:700;font-size:17px;margin-bottom:10px;}
+.e-desc{color:rgba(255,255,255,.48);font-size:14px;line-height:1.75;}
+
+/* ═══════════════════════════════════════
+   LUMI — AI BEST FRIEND
+═══════════════════════════════════════ */
+#ai-section{padding:120px 48px;background:var(--mist);}
+#ai-section .s-eyebrow{color:var(--sage);}
+#ai-section .s-title{color:var(--ink);}
+#ai-section .s-sub{color:var(--ink);opacity:.55;}
+.lumi-feature-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:56px;}
+.lumi-feat{background:#fff;border:1px solid rgba(61,122,94,.18);color:var(--sage);padding:9px 20px;border-radius:99px;font-size:14px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.05);}
+.lumi-shell{max-width:860px;margin:0 auto;background:#fff;border-radius:var(--r-xxl);box-shadow:0 32px 100px rgba(0,0,0,.12);overflow:hidden;display:flex;flex-direction:column;}
+.lumi-hdr{background:linear-gradient(135deg,var(--ink) 0%,#1e4030 100%);padding:26px 32px;display:flex;align-items:center;gap:18px;}
+.lumi-av{width:54px;height:54px;background:linear-gradient(135deg,var(--sage-l),var(--sage));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 4px 16px rgba(94,171,132,.35);}
+.lumi-hdr-info{flex:1;}
+.lumi-hdr-name{color:#fff;font-weight:700;font-size:18px;letter-spacing:-.2px;}
+.lumi-hdr-status{color:rgba(255,255,255,.55);font-size:13px;display:flex;align-items:center;gap:7px;margin-top:3px;}
+.status-dot{width:7px;height:7px;background:#52b788;border-radius:50%;flex-shrink:0;animation:blink 1.8s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.lumi-msgs{flex:1;padding:28px;min-height:420px;max-height:520px;overflow-y:auto;display:flex;flex-direction:column;gap:16px;background:#f8faf9;}
+.lumi-msgs::-webkit-scrollbar{width:4px;} .lumi-msgs::-webkit-scrollbar-thumb{background:var(--sage-l);border-radius:2px;}
+/* bubbles */
+.msg-row{display:flex;gap:10px;align-items:flex-end;animation:msgIn .3s ease;}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg-row.u{flex-direction:row-reverse;}
+.msg-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.msg-row.l .msg-av{background:linear-gradient(135deg,var(--sage-l),var(--sage));}
+.msg-row.u .msg-av{background:linear-gradient(135deg,var(--gold),var(--ember));}
+.msg-bub{max-width:74%;padding:13px 17px;border-radius:18px;font-size:15px;line-height:1.7;}
+.msg-row.l .msg-bub{background:#fff;color:var(--ink);border-bottom-left-radius:4px;box-shadow:0 2px 10px rgba(0,0,0,.07);}
+.msg-row.u .msg-bub{background:linear-gradient(135deg,var(--sage-l),var(--sage));color:#fff;border-bottom-right-radius:4px;}
+.typing-dots{background:#fff;padding:14px 18px;border-radius:18px;border-bottom-left-radius:4px;display:flex;gap:5px;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,.07);}
+.td{width:8px;height:8px;background:var(--sage-l);border-radius:50%;animation:tdBounce 1.2s infinite;}
+.td:nth-child(2){animation-delay:.2s;} .td:nth-child(3){animation-delay:.4s;}
+@keyframes tdBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+/* quick replies */
+.qr-row{display:flex;flex-wrap:wrap;gap:9px;padding:0 28px 18px;}
+.qr-btn{padding:9px 17px;border-radius:99px;border:1.5px solid var(--sage);background:#fff;color:var(--sage);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif;}
+.qr-btn:hover{background:var(--sage);color:#fff;}
+/* input row */
+.lumi-input-row{display:flex;gap:12px;padding:18px 22px;border-top:1px solid #efefef;background:#fff;}
+.lumi-txt{flex:1;border:2px solid #e6e6e6;border-radius:26px;padding:13px 20px;font-family:'Outfit',sans-serif;font-size:15px;outline:none;transition:border .2s;resize:none;max-height:100px;}
+.lumi-txt:focus{border-color:var(--sage);}
+.lumi-go{width:48px;height:48px;background:linear-gradient(135deg,var(--sage-l),var(--sage));border:none;border-radius:50%;color:#fff;font-size:20px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lumi-go:hover{transform:scale(1.1);}
+.lumi-go:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+/* result card */
+.res-card{background:linear-gradient(135deg,#edfaf3,#dff5e8);border:1px solid #b8e8cc;border-radius:20px;padding:22px;margin-top:6px;}
+.res-grade{font-family:'Cormorant Garamond',serif;font-size:58px;font-weight:700;text-align:center;margin-bottom:8px;}
+.res-head{font-weight:700;font-size:17px;text-align:center;color:var(--ink);margin-bottom:8px;}
+.res-sum{font-size:14px;color:var(--ink);opacity:.6;text-align:center;line-height:1.7;margin-bottom:16px;}
+.mini-list{display:grid;gap:10px;}
+.mini-item{border-radius:14px;padding:13px 16px;font-size:14px;}
+.mi-warn{background:#fff5f0;border-left:3px solid var(--ember);}
+.mi-tip{background:#f0fdf5;border-left:3px solid var(--sage);}
+.mi-title{font-weight:700;margin-bottom:4px;color:var(--ink);font-size:14px;}
+.mi-text{color:var(--ink);opacity:.6;line-height:1.6;}
+.chal-wrap{background:linear-gradient(135deg,var(--ink),#0f3020);border-radius:16px;padding:18px;color:#fff;margin-top:12px;}
+.chal-title{font-weight:700;margin-bottom:12px;font-size:14px;}
+.day-row{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+.day-box{background:rgba(255,255,255,.08);border-radius:10px;padding:9px 3px;text-align:center;font-size:9px;font-weight:600;color:rgba(255,255,255,.75);}
+.day-n{display:block;font-size:14px;font-weight:700;margin-bottom:2px;}
+.act-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
+.act-btn{flex:1;min-width:90px;padding:11px;border-radius:13px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:'Outfit',sans-serif;transition:all .2s;}
+.ab-share{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;}
+.ab-save{background:linear-gradient(135deg,var(--gold),var(--ember));color:#fff;}
+.ab-reset{background:var(--sage-pale);color:var(--sage);border:1px solid rgba(94,171,132,.4)!important;}
+
+/* ═══════════════════════════════════════
+   SCHEDULE BUILDER
+═══════════════════════════════════════ */
+#schedule-section{padding:120px 48px;background:linear-gradient(162deg,#0b1a14 0%,#142a1e 50%,#1a3828 100%);}
+#schedule-section .s-eyebrow{color:var(--gold);}
+#schedule-section .s-title{color:#fff;}
+#schedule-section .s-sub{color:rgba(255,255,255,.52);}
+.sched-tags{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:-36px 0 56px;}
+.sched-tag{background:rgba(240,168,50,.1);color:var(--gold);border:1px solid rgba(240,168,50,.28);padding:8px 18px;border-radius:99px;font-size:13px;font-weight:600;}
+.sched-shell{max-width:860px;margin:0 auto;background:rgba(255,255,255,.04);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.09);border-radius:var(--r-xxl);overflow:hidden;}
+.sched-hdr{background:linear-gradient(135deg,#c46025,#e85d3a);padding:26px 32px;display:flex;align-items:center;gap:16px;}
+.sched-av{width:52px;height:52px;background:rgba(255,255,255,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
+.sched-hdr-name{color:#fff;font-weight:700;font-size:18px;}
+.sched-hdr-status{color:rgba(255,255,255,.65);font-size:13px;display:flex;align-items:center;gap:7px;margin-top:3px;}
+.sched-msgs{min-height:340px;max-height:460px;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:14px;}
+.sched-msgs::-webkit-scrollbar{width:4px;} .sched-msgs::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px;}
+.sm-row{display:flex;gap:10px;align-items:flex-end;animation:msgIn .3s ease;}
+.sm-row.u{flex-direction:row-reverse;}
+.sm-bub{max-width:76%;padding:12px 17px;border-radius:18px;font-size:15px;line-height:1.7;}
+.sm-row.l .sm-bub{background:rgba(255,255,255,.11);color:#fff;border-bottom-left-radius:4px;}
+.sm-row.u .sm-bub{background:linear-gradient(135deg,var(--gold),var(--ember));color:#fff;border-bottom-right-radius:4px;}
+.sm-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.sm-row.l .sm-av{background:linear-gradient(135deg,var(--gold),var(--ember));}
+.sm-row.u .sm-av{background:linear-gradient(135deg,var(--sage-l),var(--sage));}
+.sched-qr-row{display:flex;flex-wrap:wrap;gap:9px;padding:0 22px 12px;}
+.sqr-btn{padding:8px 15px;border-radius:99px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.07);color:rgba(255,255,255,.85);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif;}
+.sqr-btn:hover{background:rgba(240,168,50,.25);border-color:var(--gold);}
+.sched-input-row{display:flex;gap:12px;padding:16px 20px;border-top:1px solid rgba(255,255,255,.08);}
+.sched-txt{flex:1;border:1px solid rgba(255,255,255,.18);border-radius:26px;padding:13px 20px;font-family:'Outfit',sans-serif;font-size:15px;outline:none;background:rgba(255,255,255,.07);color:#fff;}
+.sched-txt::placeholder{color:rgba(255,255,255,.3);}
+.sched-txt:focus{border-color:var(--gold);}
+.sched-go{width:46px;height:46px;background:linear-gradient(135deg,var(--gold),var(--ember));border:none;border-radius:50%;color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.sched-go:hover{transform:scale(1.1);}
+.sched-go:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+/* schedule card output */
+.sched-out{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:22px;margin-top:8px;}
+.sched-theme{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;}
+.sched-greeting{background:rgba(240,168,50,.12);border:1px solid rgba(240,168,50,.22);border-radius:14px;padding:14px 18px;margin-bottom:16px;color:rgba(255,255,255,.88);font-size:15px;line-height:1.7;}
+.sched-block{margin-bottom:14px;display:flex;gap:14px;align-items:flex-start;}
+.sched-time{font-size:11px;font-weight:700;letter-spacing:1px;color:var(--gold);text-transform:uppercase;min-width:78px;padding-top:2px;}
+.sched-act{font-size:14px;color:rgba(255,255,255,.88);line-height:1.6;padding-left:14px;border-left:2px solid rgba(240,168,50,.35);}
+.sched-dl{display:flex;gap:10px;margin-top:16px;}
+.sdl-btn{flex:1;padding:12px;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;border:none;font-family:'Outfit',sans-serif;transition:all .2s;}
+.sdl-html{background:linear-gradient(135deg,#4facfe,#00f2fe);color:#fff;}
+.sdl-txt{background:rgba(255,255,255,.09);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.18)!important;}
+.sched-reset{width:100%;margin-top:10px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.12);padding:12px;border-radius:13px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
+.sched-reset:hover{background:rgba(255,255,255,.11);}
+
+/* ═══════════════════════════════════════
+   SUPPORT
+═══════════════════════════════════════ */
+#support-section{padding:100px 48px;background:var(--cream);}
+.sup-card{max-width:660px;margin:0 auto;background:#fff;border-radius:var(--r-xxl);padding:60px 48px;box-shadow:var(--shadow-lift);text-align:center;}
+.sup-icon{font-size:64px;margin-bottom:20px;display:block;animation:heartBeat 1.6s ease-in-out infinite;}
+@keyframes heartBeat{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+.sup-title{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:700;color:var(--ink);margin-bottom:14px;}
+.sup-p{font-size:17px;color:var(--ink);opacity:.56;line-height:1.85;margin-bottom:36px;}
+.kofi-btn{display:inline-block;background:linear-gradient(135deg,#FF5E5B,#ff8c42);color:#fff;padding:18px 48px;border-radius:99px;font-size:17px;font-weight:700;text-decoration:none;transition:all .28s;box-shadow:0 10px 30px rgba(255,94,91,.3);}
+.kofi-btn:hover{transform:translateY(-3px);box-shadow:0 16px 44px rgba(255,94,91,.4);}
+.sup-note{font-size:14px;color:var(--ink);opacity:.38;margin-top:18px;}
+
+/* ═══════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════ */
+#about-section{padding:100px 48px;background:var(--ink);}
+.about-inner{max-width:740px;margin:0 auto;text-align:center;}
+.about-badge{display:inline-block;background:rgba(94,171,132,.15);border:1px solid rgba(94,171,132,.3);color:var(--sage-l);padding:7px 20px;border-radius:99px;font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:28px;}
+.about-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,52px);font-weight:700;color:#fff;margin-bottom:24px;line-height:1.15;}
+.about-title span{color:var(--sage-l);}
+.about-p{color:rgba(255,255,255,.55);font-size:17px;line-height:1.9;margin-bottom:18px;}
+.about-sig{color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;margin-top:30px;}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer{background:#060609;color:rgba(255,255,255,.3);text-align:center;padding:44px 24px;font-size:14px;}
+footer strong{color:var(--sage-l);}
+.footer-links{display:flex;gap:32px;justify-content:center;margin-bottom:20px;flex-wrap:wrap;}
+.footer-links a{color:rgba(255,255,255,.3);text-decoration:none;font-size:13px;transition:color .2s;}
+.footer-links a:hover{color:var(--sage-l);}
+
+/* ─ FLOAT COFFEE ─ */
+#float-coffee{position:fixed;bottom:28px;right:26px;z-index:998;background:linear-gradient(135deg,#FF5E5B,#ff8c42);color:#fff;border:none;border-radius:99px;padding:12px 22px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 6px 24px rgba(255,94,91,.4);font-family:'Outfit',sans-serif;display:flex;align-items:center;gap:8px;text-decoration:none;animation:coffeeBob 3s ease-in-out infinite;transition:all .28s;}
+#float-coffee:hover{transform:translateY(-4px) scale(1.04);}
+@keyframes coffeeBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+/* ─ RESPONSIVE ─ */
+@media(max-width:720px){
+  #site-nav{padding:0 20px;} .nav-links{display:none;}
+  #hero{padding:120px 24px 80px;} #transform,#effects,#ai-section,#schedule-section,#support-section,#about-section{padding:80px 20px;}
+  .choice-cards{flex-direction:column;gap:20px;align-items:center;} .c-or{margin:0;}
+  .lumi-input-row,.sched-input-row{padding:12px;}
+  .sup-card{padding:40px 28px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ DOODLE FLOATERS ══ -->
+<div class="f-doodle fd1">🌱 One step at a time</div>
+<div class="f-doodle fd2">⚡ Start before ready</div>
+<div class="f-doodle fd3">💧 Just begin. Now.</div>
+<div class="f-doodle fd4">🌟 Small moves, big life</div>
+<div class="f-doodle fd5">🦋 You're already changing</div>
+
+<!-- ══ SCREEN 1: CHOICE ══ -->
+<div class="screen" id="sc-choice">
+  <div class="choice-noise"></div>
+  <div class="choice-glow"></div>
+  <p class="choice-brand">LL+ · Live Life Plus</p>
+  <h1 class="choice-title">What will you<br>choose today?</h1>
+  <p class="choice-sub">A single choice that could shift everything.</p>
+  <div class="choice-cards">
+    <button class="c-card" onclick="chooseArrow()" aria-label="Stay as you are">
+      <div class="c-card-icon">💔➡️</div>
+      <div class="c-card-label">Stay as I am</div>
+      <div class="c-card-desc">Keep scrolling. Nothing changes.</div>
+    </button>
+    <div class="c-or">or</div>
+    <button class="c-card primary" onclick="chooseHeal()" aria-label="Feel it and heal">
+      <div class="c-card-icon">💚✨</div>
+      <div class="c-card-label">Feel it &amp; Heal</div>
+      <div class="c-card-desc">Face it, release it, grow.</div>
+    </button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 2: WRONG ══ -->
+<div class="screen off" id="sc-wrong">
+  <div class="wrong-big" style="animation:wobble .6s ease;">😬</div>
+  <div class="wrong-h">Oops — you chose the easy way out.</div>
+  <div class="wrong-p">That's okay. The best version of you is still here, waiting. Ready when you are.</div>
+  <button class="btn-ghost-red" onclick="backToChoice()">← Take me back</button>
+</div>
+
+<!-- ══ SCREEN 3: RED HEART ══ -->
+<div class="screen off" id="sc-red">
+  <!-- pain chips -->
+  <div class="pain-chip pc-red pc1" style="animation-duration:9s;">😤 So stressed</div>
+  <div class="pain-chip pc-blue pc2" style="animation-duration:11s;animation-delay:-2s;">😔 I'm not enough</div>
+  <div class="pain-chip pc-purple pc3" style="animation-duration:8s;animation-delay:-4s;">😰 What if I fail</div>
+  <div class="pain-chip pc-teal pc4" style="animation-duration:10s;animation-delay:-1s;">😴 So exhausted</div>
+  <div class="pain-chip pc-red pc5" style="animation-duration:12s;animation-delay:-3s;">😠 Nothing works</div>
+  <div class="pain-chip pc-purple pc6" style="animation-duration:9.5s;animation-delay:-5s;">😶 Lost &amp; confused</div>
+  <div class="pain-chip pc-blue pc7" style="animation-duration:10s;animation-delay:-2s;">💔 Why bother</div>
+  <div class="pain-chip pc-teal pc8" style="animation-duration:8.5s;animation-delay:-6s;">🥀 I give up</div>
+  <div class="pain-chip pc-red pc9" style="animation-duration:11s;animation-delay:-1s;">😤 Always behind</div>
+  <div class="pain-chip pc-purple pc10" style="animation-duration:9s;animation-delay:-4s;">😰 Can't keep up</div>
+  <div class="pain-chip pc-blue pc11" style="animation-duration:10s;animation-delay:-3s;">😞 Nobody gets it</div>
+  <div class="pain-chip pc-teal pc12" style="animation-duration:8s;animation-delay:-5s;">💤 Running empty</div>
+  <p class="rh-label">You're feeling it. That's real.</p>
+  <div class="rh-stage" id="rhStage">
+    <div class="rh-aura" id="rhAura"></div>
+    <svg class="rh-svg" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg">
+      <path id="rhPath" d="M50 85 C50 85 5 55 5 28 C5 14 16 5 28 5 C37 5 45 11 50 18 C55 11 63 5 72 5 C84 5 95 14 95 28 C95 55 50 85 50 85Z" fill="#c1121f"/>
+    </svg>
+    <button class="pin-ring" id="pinBtn" onclick="popHeart()" aria-label="Pop the heart">📍</button>
+  </div>
+  <p class="rh-cue" id="rhCue">pop the heart &nbsp;📍</p>
+  <!-- burst container -->
+  <div class="burst-wrap" id="burstWrap"></div>
+</div>
+
+<!-- ══ SCREEN 4: GREEN HEART ══ -->
+<div class="screen off" id="sc-green">
+  <!-- good chips -->
+  <div class="good-chip gc1">💚 I can grow</div>
+  <div class="good-chip gc2">✨ I am enough</div>
+  <div class="good-chip gc3">🌱 One step at a time</div>
+  <div class="good-chip gc4">💪 I've got this</div>
+  <div class="good-chip gc5">🌟 Better is possible</div>
+  <div class="good-chip gc6">🙏 I choose me</div>
+  <div class="good-chip gc7">🦋 I am changing</div>
+  <div class="good-chip gc8">☀️ Today is new</div>
+  <div class="good-chip gc9">🎯 I have purpose</div>
+  <div class="good-chip gc10">💫 I deserve better</div>
+  <div class="good-chip gc11">🌈 Hope is real</div>
+  <div class="good-chip gc12">❤️ I'm not alone</div>
+  <p class="gh-label">You chose to heal. 💚</p>
+  <div class="gh-stage">
+    <div class="gh-aura"></div>
+    <svg class="gh-svg" viewBox="0 0 100 90" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 85 C50 85 5 55 5 28 C5 14 16 5 28 5 C37 5 45 11 50 18 C55 11 63 5 72 5 C84 5 95 14 95 28 C95 55 50 85 50 85Z" fill="#52b788"/>
+    </svg>
+  </div>
+  <div class="gh-msg">
+    <h2>You deserve a better life. 💚</h2>
+    <p>Let's build it — one good day at a time.</p>
+  </div>
+  <div class="gh-nudge" id="ghNudge"></div>
+  <button class="gh-cta" onclick="enterSite()">Step into your life →</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN SITE
+══════════════════════════════════════ -->
+<button id="lang-btn" onclick="toggleLang()">🌐 हिंदी</button>
+<nav id="site-nav">
+  <div class="nav-logo">LL<sup>+</sup></div>
+  <div class="nav-spacer"></div>
+  <div class="nav-links">
+    <a href="#ai-section">Lumi</a>
+    <a href="#schedule-section">Schedule</a>
+    <a href="#support-section">Support</a>
+    <a href="#about-section">About</a>
+  </div>
+  <button id="lang-btn-nav" style="display:none"></button>
+  <button class="nav-cta" onclick="scrollTo('ai-section')">Talk to Lumi →</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-orb orb1"></div><div class="hero-orb orb2"></div><div class="hero-orb orb3"></div>
+  <div class="hero-eyebrow">✦ &nbsp;Your Life. Your Change.</div>
+  <h1 class="hero-h1"><del>Bad Habits</del><br>End <em>Here.</em></h1>
+  <p class="hero-sub">LL+ pairs AI with genuine warmth to help you understand your lifestyle, break what's holding you back, and build the life you actually deserve.</p>
+  <div class="hero-pills">
+    <span class="hero-pill">🌱 Lumi — Your AI Best Friend</span>
+    <span class="hero-pill">📅 Smart Schedule Builder</span>
+    <span class="hero-pill">🎨 Themed Schedules</span>
+    <span class="hero-pill">✅ Completely Free</span>
+  </div>
+  <div class="hero-btns">
+    <button class="btn-sage" onclick="scrollTo('ai-section')">🌱 Chat with Lumi</button>
+    <button class="btn-outline" onclick="scrollTo('schedule-section')">📅 Build My Schedule</button>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div><span>scroll</span></div>
+</section>
+
+<!-- TRANSFORM -->
+<section id="transform">
+  <p class="s-eyebrow reveal">Real Transformations</p>
+  <h2 class="s-title reveal">From Surviving to Thriving</h2>
+  <p class="s-sub reveal">What a real lifestyle shift looks like — in the body, the mind, and the soul.</p>
+  <div class="t-grid reveal">
+    <div class="t-card">
+      <div class="tc-before">
+        <span class="tc-emoji">😴</span>
+        <div class="tc-tag">Before</div>
+        <div class="tc-h">3 AM Sleep, Tired Always</div>
+        <div class="tc-p">Constant brain fog, no motivation, waking up already exhausted.</div>
+        <div class="tc-chips"><span class="tc-chip">💀 Zero energy</span><span class="tc-chip">😤 Irritable</span></div>
+      </div>
+      <div class="tc-mid"><span class="tc-mid-icon">🌙</span><span class="tc-mid-arrow">→ CHANGE →</span><span class="tc-mid-icon">☀️</span></div>
+      <div class="tc-after">
+        <span class="tc-emoji">✨</span>
+        <div class="tc-tag">After</div>
+        <div class="tc-h">10 PM Sleep, Energized Morning</div>
+        <div class="tc-p">Deep restful sleep, sharp focus, waking up ready to win the day.</div>
+        <div class="tc-chips"><span class="tc-chip">⚡ Full energy</span><span class="tc-chip">😌 Calm &amp; clear</span></div>
+      </div>
+    </div>
+    <div class="t-card">
+      <div class="tc-before">
+        <span class="tc-emoji">🍔</span>
+        <div class="tc-tag">Before</div>
+        <div class="tc-h">Junk Every Day, Low Confidence</div>
+        <div class="tc-p">Body aches, sluggish digestion, hiding from mirrors, low self-worth.</div>
+        <div class="tc-chips"><span class="tc-chip">😓 Body pain</span><span class="tc-chip">😞 No confidence</span></div>
+      </div>
+      <div class="tc-mid"><span class="tc-mid-icon">🍔</span><span class="tc-mid-arrow">→ CHANGE →</span><span class="tc-mid-icon">🥗</span></div>
+      <div class="tc-after">
+        <span class="tc-emoji">💪</span>
+        <div class="tc-tag">After</div>
+        <div class="tc-h">Nourished, Fit, Confident</div>
+        <div class="tc-p">Lighter body, glowing skin, strong digestion, proud in your own skin.</div>
+        <div class="tc-chips"><span class="tc-chip">💫 Glowing</span><span class="tc-chip">❤️ Self-love</span></div>
+      </div>
+    </div>
+    <div class="t-card">
+      <div class="tc-before">
+        <span class="tc-emoji">📱</span>
+        <div class="tc-tag">Before</div>
+        <div class="tc-h">8hrs Screen, Zero Movement</div>
+        <div class="tc-p">Back pain, eye strain, social anxiety, feeling hollow inside.</div>
+        <div class="tc-chips"><span class="tc-chip">😶 Empty</span><span class="tc-chip">🦴 Body pain</span></div>
+      </div>
+      <div class="tc-mid"><span class="tc-mid-icon">🏠</span><span class="tc-mid-arrow">→ CHANGE →</span><span class="tc-mid-icon">🌤️</span></div>
+      <div class="tc-after">
+        <span class="tc-emoji">🏃</span>
+        <div class="tc-tag">After</div>
+        <div class="tc-h">Active, Present, Fulfilled</div>
+        <div class="tc-p">Strong body, real connections, purpose every single day.</div>
+        <div class="tc-chips"><span class="tc-chip">🌟 Purpose</span><span class="tc-chip">🤝 Connected</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EFFECTS -->
+<section id="effects">
+  <p class="s-eyebrow reveal">The Hidden Damage</p>
+  <h2 class="s-title reveal">Small Habits, Huge Consequences</h2>
+  <p class="s-sub reveal">Tiny daily mistakes quietly pile up — destroying your health, happiness, and future. Here's what's really happening.</p>
+  <div class="e-grid reveal">
+    <div class="e-card"><div class="e-icon">🧠</div><div class="e-title">Brain Fog</div><div class="e-desc">Poor sleep wrecks memory, focus, and creativity. You feel mentally paralysed.</div></div>
+    <div class="e-card"><div class="e-icon">❤️</div><div class="e-title">Heart Risk</div><div class="e-desc">Junk food and inactivity silently damage your heart — even in your early 20s.</div></div>
+    <div class="e-card"><div class="e-icon">😰</div><div class="e-title">Anxiety Spiral</div><div class="e-desc">Bad lifestyle is directly tied to rising anxiety and depression worldwide.</div></div>
+    <div class="e-card"><div class="e-icon">🦴</div><div class="e-title">Weak Body</div><div class="e-desc">Sitting all day weakens muscles, joints, and posture faster than you know.</div></div>
+    <div class="e-card"><div class="e-icon">😔</div><div class="e-title">Lost Confidence</div><div class="e-desc">You stop believing in yourself. Relationships suffer. Opportunities vanish.</div></div>
+    <div class="e-card"><div class="e-icon">⏳</div><div class="e-title">Shorter Life</div><div class="e-desc">Studies show poor lifestyle can silently cut 10–20 years off your lifespan.</div></div>
+  </div>
+</section>
+
+<!-- LUMI -->
+<section id="ai-section">
+  <div class="reveal">
+    <p class="s-eyebrow">Your AI Best Friend</p>
+    <h2 class="s-title">Chat with Lumi 🌱</h2>
+    <p class="s-sub" style="margin-bottom:28px;">Lumi isn't a chatbot. She's warm, honest, and genuinely listens. Share how life's going — she'll understand, find what's holding you back, and help you move forward.</p>
+    <div class="lumi-feature-row">
+      <span class="lumi-feat">💬 Real conversation</span>
+      <span class="lumi-feat">🔍 Lifestyle analysis</span>
+      <span class="lumi-feat">📋 7-day action plan</span>
+      <span class="lumi-feat">💚 Zero judgment</span>
+      <span class="lumi-feat">📤 Save &amp; share</span>
+    </div>
+  </div>
+  <div class="lumi-shell reveal">
+    <div class="lumi-hdr">
+      <div class="lumi-av">🌱</div>
+      <div class="lumi-hdr-info">
+        <div class="lumi-hdr-name">Lumi — Your Life Friend</div>
+        <div class="lumi-hdr-status"><span class="status-dot"></span>Here for you, always 💚</div>
+      </div>
+    </div>
+    <div class="lumi-msgs" id="lumiMsgs"></div>
+    <div class="qr-row" id="lumiQR"></div>
+    <div class="lumi-input-row">
+      <textarea class="lumi-txt" id="lumiTxt" placeholder="Talk to Lumi..." rows="1" onkeydown="handleLKey(event)"></textarea>
+      <button class="lumi-go" id="lumiGo" onclick="sendLumi()">➤</button>
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section id="schedule-section">
+  <p class="s-eyebrow reveal">AI Schedule Maker</p>
+  <h2 class="s-title reveal">Build Your Perfect Day 📅</h2>
+  <p class="s-sub reveal">Answer a few questions and get a beautiful, themed daily schedule crafted just for you — free, in seconds.</p>
+  <div class="sched-tags reveal">
+    <span class="sched-tag">📅 Personalised time blocks</span>
+    <span class="sched-tag">🎨 Any theme you love</span>
+    <span class="sched-tag">⬇️ Download HTML or TXT</span>
+    <span class="sched-tag">🔄 Rebuild anytime</span>
+  </div>
+  <div class="sched-shell reveal">
+    <div class="sched-hdr">
+      <div class="sched-av">📅</div>
+      <div>
+        <div class="sched-hdr-name">Schedule Builder</div>
+        <div class="sched-hdr-status"><span class="status-dot"></span>Let's plan your perfect day</div>
+      </div>
+    </div>
+    <div class="sched-msgs" id="schedMsgs"></div>
+    <div class="sched-qr-row" id="schedQR"></div>
+    <div class="sched-input-row">
+      <input class="sched-txt" id="schedTxt" placeholder="Type your answer..." onkeydown="handleSKey(event)"/>
+      <button class="sched-go" id="schedGo" onclick="sendSched()">➤</button>
+    </div>
+  </div>
+</section>
+
+<!-- SUPPORT -->
+<section id="support-section">
+  <div class="sup-card reveal">
+    <span class="sup-icon">☕</span>
+    <div class="sup-title">This site is free. Keep it alive.</div>
+    <p class="sup-p">LL+ is built with love by a young creator who believes everyone deserves a better life. If Lumi or the Schedule Builder helped you even a little, consider buying a coffee. Every bit keeps Lumi running and the site growing. 💚</p>
+    <a class="kofi-btn" href="https://ko-fi.com" target="_blank" rel="noopener">☕ Buy Me a Coffee on Ko-fi</a>
+    <p class="sup-note">No pressure at all — even sharing this site helps more than you know. 🙏</p>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about-section">
+  <div class="about-inner reveal">
+    <span class="about-badge">Our Story</span>
+    <h2 class="about-title">Why I Built <span>LL+</span></h2>
+    <p class="about-p">I looked around and saw so many people — including myself — frustrated, tired, and stuck. Not because they were bad people. Just because of small bad habits that quietly piled up over time.</p>
+    <p class="about-p">I realised: if we could just swap those habits for better ones, everything changes. Sleep. Focus. Happiness. Confidence. Energy. It all connects.</p>
+    <p class="about-p">So I built LL+ — a free AI-powered tool to help anyone, anywhere, understand their lifestyle and take real steps toward a better one. No judgment. No cost. Just change.</p>
+    <p class="about-sig">— Made with 💚 by a young creator who believes in you</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-links">
+    <a href="#hero">Home</a><a href="#ai-section">Chat with Lumi</a>
+    <a href="#schedule-section">Schedule</a><a href="#support-section">Support</a><a href="#about-section">About</a>
+  </div>
+  <p>Made with ❤️ by <strong>LL+ Live Life Plus</strong> — Because you deserve better.</p>
+</footer>
+
+<a id="float-coffee" href="https://ko-fi.com" target="_blank" rel="noopener">☕ Support LL+</a>
+
+<script>
+// ════════════════════════════════════════════
+//  ★  GROK API KEY — PASTE YOURS HERE  ★
+// ════════════════════════════════════════════
+//
+//  How to get your Grok API key:
+//  1. Go to https://console.x.ai
+//  2. Sign in with your X (Twitter) account
+//  3. Click "API Keys" → "Create API Key"
+//  4. Copy it and paste between the quotes below
+//
+const GROK_KEY = '';   // ← paste Grok key here
+//
+//  Fallback: Gemini (used if Grok key is empty)
+const GEMINI_KEY = '';
+const GEMINI_MODELS = ['gemini-2.0-flash','gemini-2.0-flash-lite','gemini-1.5-flash','gemini-1.5-pro'];
+// ════════════════════════════════════════════
+
+async function callAI(prompt) {
+  if (GROK_KEY && GROK_KEY.trim().length > 10) {
+    const res = await fetch('https://api.x.ai/v1/chat/completions', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROK_KEY},
+      body: JSON.stringify({model:'grok-3-mini',max_tokens:1400,messages:[{role:'user',content:prompt}]})
+    });
+    if (!res.ok) throw new Error('Grok: '+(await res.text()).slice(0,120));
+    const d = await res.json();
+    return (d.choices?.[0]?.message?.content||'').replace(/```json|```/g,'').trim();
+  }
+  let last='';
+  for (const m of GEMINI_MODELS) {
+    try {
+      const url=`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${GEMINI_KEY}`;
+      const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})});
+      if(!res.ok){const e=await res.json().catch(()=>({}));last=`${m}:${res.status}`;continue;}
+      const d=await res.json();
+      const t=d.candidates?.[0]?.content?.parts?.[0]?.text||'';
+      if(!t){last=m+':empty';continue;}
+      return t.replace(/```json|```/g,'').trim();
+    } catch(e){last=m+':'+e.message;}
+  }
+  throw new Error('All models failed. '+last);
+}
+
+// ════════════════════════════════════════════
+// SCREEN FLOW
+// ════════════════════════════════════════════
+function show(id){
+  ['sc-choice','sc-wrong','sc-red','sc-green'].forEach(s=>
+    document.getElementById(s).classList[s===id?'remove':'add']('off'));
+}
+function chooseArrow(){ show('sc-wrong'); }
+function backToChoice(){ show('sc-choice'); }
+function chooseHeal(){
+  document.getElementById('sc-choice').classList.add('off');
+  setTimeout(()=>show('sc-red'),80);
+}
+
+// ─ RED HEART: pin pop ─
+let popped = false;
+function popHeart(){
+  if(popped) return; popped=true;
+  document.getElementById('pinBtn').style.display='none';
+  document.getElementById('rhCue').style.opacity='0';
+  spawnBurst();
+  const path=document.getElementById('rhPath');
+  path.style.transition='fill .3s'; path.setAttribute('fill','#ff3366');
+  document.getElementById('rhAura').style.animation='none';
+  const st=document.getElementById('rhStage');
+  if(!document.getElementById('rhBK')){
+    const s=document.createElement('style');s.id='rhBK';
+    s.textContent='@keyframes rhPop{0%{transform:scale(1)}40%{transform:scale(1.38)}100%{transform:scale(0) rotate(18deg);opacity:0}}';
+    document.head.appendChild(s);
+  }
+  st.style.animation='rhPop .55s ease forwards';
+  document.querySelectorAll('.pain-chip').forEach(e=>{e.style.transition='all .5s';e.style.opacity='0';e.style.transform='scale(0.2) translateY(-50px)';});
+  setTimeout(()=>{
+    show('sc-green');
+    setTimeout(()=>document.querySelectorAll('.good-chip').forEach((e,i)=>setTimeout(()=>e.style.opacity='1',i*75)),400);
+    startGhNudge();
+  }, 820);
+}
+function spawnBurst(){
+  const wrap=document.getElementById('burstWrap');
+  const cols=['#ff3366','#ff6b8a','#ffaa33','#ff2200','#ff99bb','#ffcc44'];
+  for(let i=0;i<16;i++){
+    const d=document.createElement('div'); d.className='b-dot';
+    const angle=(i/16)*2*Math.PI, dist=72+Math.random()*70;
+    const sz=7+Math.random()*8;
+    d.style.cssText=`--bx:${Math.cos(angle)*dist}px;--by:${Math.sin(angle)*dist}px;width:${sz}px;height:${sz}px;background:${cols[i%cols.length]};animation-delay:${i*.018}s;`;
+    wrap.appendChild(d); setTimeout(()=>d.remove(),700);
+  }
+}
+
+// ─ GREEN HEART NUDGE ─
+const NUDGES=["🌅 The first step is always the hardest. Take it anyway.","🚶 Get up. Just start. Everything follows.","🌱 Small moves today, big life tomorrow.","🔥 Done is better than perfect. Move.","🎯 One good choice leads to another.","🌟 Future you is cheering right now.","🦋 Change starts the moment you decide."];
+let gIdx=0,gTimer=null;
+function startGhNudge(){
+  const el=document.getElementById('ghNudge');
+  gIdx=Math.floor(Math.random()*NUDGES.length); el.textContent=NUDGES[gIdx];
+  gTimer=setInterval(()=>{el.style.opacity='0';setTimeout(()=>{gIdx=(gIdx+1)%NUDGES.length;el.textContent=NUDGES[gIdx];el.style.opacity='1';},500);},4200);
+}
+function enterSite(){
+  if(gTimer) clearInterval(gTimer);
+  document.getElementById('sc-green').classList.add('off');
+  document.querySelectorAll('.f-doodle').forEach(e=>e.style.display='block');
+}
+
+// ════════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════════
+let lang='en';
+function toggleLang(){lang=lang==='en'?'hi':'en';document.getElementById('lang-btn').textContent=lang==='en'?'🌐 हिंदी':'🌐 English';}
+function scrollTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
+const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ════════════════════════════════════════════
+// LUMI CHAT
+// ════════════════════════════════════════════
+let lHistory=[],lState='greeting',lData='';
+
+function addLMsg(role,html,isHTML=false){
+  const row=document.createElement('div'); row.className='msg-row '+role;
+  const av=document.createElement('div'); av.className='msg-av'; av.textContent=role==='l'?'🌱':'😊';
+  const bub=document.createElement('div'); bub.className='msg-bub';
+  if(isHTML) bub.innerHTML=html; else bub.textContent=html;
+  if(role==='l'){row.appendChild(av);row.appendChild(bub);}else{row.appendChild(bub);row.appendChild(av);}
+  document.getElementById('lumiMsgs').appendChild(row);
+  document.getElementById('lumiMsgs').scrollTop=99999;
+}
+function showLTyping(){
+  const row=document.createElement('div');row.className='msg-row l';row.id='ltyping';
+  const av=document.createElement('div');av.className='msg-av';av.textContent='🌱';
+  const b=document.createElement('div');b.className='typing-dots';b.innerHTML='<div class="td"></div><div class="td"></div><div class="td"></div>';
+  row.appendChild(av);row.appendChild(b);document.getElementById('lumiMsgs').appendChild(row);
+  document.getElementById('lumiMsgs').scrollTop=99999;
+}
+function rmLTyping(){const e=document.getElementById('ltyping');if(e)e.remove();}
+function setLQR(replies){
+  const c=document.getElementById('lumiQR');c.innerHTML='';
+  replies.forEach(r=>{const b=document.createElement('button');b.className='qr-btn';b.textContent=r;
+    b.onclick=()=>{document.getElementById('lumiTxt').value=r;sendLumi();};c.appendChild(b);});
+}
+function initLumi(){
+  lHistory=[];lState='greeting';lData='';
+  document.getElementById('lumiMsgs').innerHTML='';document.getElementById('lumiQR').innerHTML='';
+  setTimeout(()=>{
+    addLMsg('l',"Hey 💚 I'm Lumi, your life friend. I'm not here to judge — I'm here to genuinely hear you. How's life been feeling lately? What's going on?");
+    setLQR(['Honestly, not great 😔','Pretty okay, I guess','Super stressed lately 😰','I want better habits']);
+    lState='chatting';
+  },600);
+}
+async function sendLumi(){
+  const inp=document.getElementById('lumiTxt');
+  const txt=inp.value.trim();if(!txt) return;
+  inp.value='';document.getElementById('lumiQR').innerHTML='';
+  document.getElementById('lumiGo').disabled=true;
+  addLMsg('u',txt);lHistory.push({r:'u',t:txt});lData+='\n'+txt;
+  showLTyping();
+  try{
+    const userMsgs=lHistory.filter(m=>m.r==='u').length;
+    if(userMsgs>=4&&lState==='chatting'){
+      lState='done';
+      const result=await getLumiAnalysis(lData);
+      rmLTyping();
+      addLMsg('l',result.transition);
+      setTimeout(()=>addLMsg('l',buildResCard(result),true),800);
+    } else {
+      const rep=await getLumiReply(lHistory,lData);
+      rmLTyping();addLMsg('l',rep.message);lHistory.push({r:'l',t:rep.message});
+      if(rep.quickReplies?.length) setLQR(rep.quickReplies);
+    }
+  }catch(e){rmLTyping();addLMsg('l','Hmm, something went wrong 😅 Make sure your API key is set in the CONFIG at the top of the script, and that the site is hosted online. Try again!');}
+  document.getElementById('lumiGo').disabled=false;
+}
+function handleLKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendLumi();}}
+
+async function getLumiReply(hist,data){
+  const prompt=`You are Lumi, a warm caring AI best friend on LL+ lifestyle app.
+You're having a genuine WhatsApp-style chat about the user's lifestyle.
+Tone: warm, like a caring best friend — NOT a therapist. SHORT (2-3 sentences). ONE follow-up question. Emojis natural but sparse.
+Conversation:
+${hist.map(m=>`${m.r==='u'?'User':'Lumi'}: ${m.t}`).join('\n')}
+Respond ONLY as valid JSON (no markdown): {"message":"<warm short reply with one question>","quickReplies":["<opt1>","<opt2>","<opt3>"]}
+Language: ${lang==='hi'?'Hindi':'English'}.`;
+  return JSON.parse(await callAI(prompt));
+}
+async function getLumiAnalysis(data){
+  const prompt=`You are Lumi, warm AI best friend. Analyze user lifestyle from chat.
+Respond ONLY as valid JSON (no markdown):
+{"transition":"<1-2 warm sentences>","grade":"<A/B/C/D/F>","headline":"<warm headline>","summary":"<2 warm sentences>","warnings":[{"title":"<issue>","text":"<friendly 1 sentence>"}],"tips":[{"title":"<tip>","text":"<simple 1 sentence>"}],"challenge":[{"day":"Day 1","task":"<short>"},{"day":"Day 2","task":"<short>"},{"day":"Day 3","task":"<short>"},{"day":"Day 4","task":"<short>"},{"day":"Day 5","task":"<short>"},{"day":"Day 6","task":"<short>"},{"day":"Day 7","task":"<short>"}]}
+warnings:2-3. tips:3-4. Warm tone. Language:${lang==='hi'?'Hindi':'English'}.
+User chat: ${data}`;
+  return JSON.parse(await callAI(prompt));
+}
+function buildResCard(r){
+  const cols={A:'#1e5238',B:'#2d7a4f',C:'#b07f20',D:'#c14020',F:'#8b1020'};
+  window._lRes=r;
+  return `<div class="res-card">
+    <div class="res-grade" style="color:${cols[r.grade]||'#2d7a4f'}">${r.grade}</div>
+    <div class="res-head">${r.headline}</div>
+    <div class="res-sum">${r.summary}</div>
+    <div class="mini-list">
+      ${(r.warnings||[]).map(w=>`<div class="mini-item mi-warn"><div class="mi-title">⚠️ ${w.title}</div><div class="mi-text">${w.text}</div></div>`).join('')}
+      ${(r.tips||[]).map(t=>`<div class="mini-item mi-tip"><div class="mi-title">✅ ${t.title}</div><div class="mi-text">${t.text}</div></div>`).join('')}
+    </div>
+    ${r.challenge?`<div class="chal-wrap"><div class="chal-title">🗓️ Your 7-Day Challenge</div><div class="day-row">${r.challenge.map(d=>`<div class="day-box"><span class="day-n">${d.day.replace('Day ','')}</span>${d.task.split(' ').slice(0,2).join(' ')}</div>`).join('')}</div></div>`:''}
+    <div class="act-btns">
+      <button class="act-btn ab-share" onclick="shareL()">📤 Share</button>
+      <button class="act-btn ab-save" onclick="saveL()">💾 Save</button>
+      <button class="act-btn ab-reset" onclick="restartLumi()">🔄 Restart</button>
+    </div>
+  </div>`;
+}
+function restartLumi(){lData='';lState='greeting';initLumi();}
+function shareL(){
+  const msg=`✨ I chatted with Lumi on LL+ and got a real lifestyle check!\nIt's free — try it:\n👉 [your link here]\n#LiveLifePlus #Lumi`;
+  if(navigator.share) navigator.share({title:'LL+',text:msg}).catch(()=>{});
+  else window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+}
+function saveL(){
+  if(!window._lRes) return;
+  const r=window._lRes;
+  const txt=`LL+ — Lumi's Lifestyle Report\n${'='.repeat(30)}\nGrade: ${r.grade}\n${r.headline}\n\n${r.summary}\n\n⚠️ Areas:\n${(r.warnings||[]).map(w=>`• ${w.title}: ${w.text}`).join('\n')}\n\n✅ Actions:\n${(r.tips||[]).map(t=>`• ${t.title}: ${t.text}`).join('\n')}\n\n🗓️ 7-Day Challenge:\n${(r.challenge||[]).map(d=>`• ${d.day}: ${d.task}`).join('\n')}\n\nBy LL+ Live Life Plus`;
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain'}));a.download='Lumi_Report.txt';a.click();
+}
+
+// ════════════════════════════════════════════
+// SCHEDULE BUILDER
+// ════════════════════════════════════════════
+let sData={},sStep=0;
+const sSteps=['name','age','wake','sleep','school','goal','theme','extra'];
+const sQ={
+  name:{q:"Hey! 👋 I'm your Schedule Builder. What's your name?",qr:[]},
+  age:{q:"Nice to meet you, {name}! 😊 How old are you?",qr:['13','14','15','16','17','18','19','20+']},
+  wake:{q:"What time do you usually wake up?",qr:['5:30 AM','6:00 AM','6:30 AM','7:00 AM','7:30 AM','8:00 AM']},
+  sleep:{q:"What time do you want to sleep?",qr:['9:30 PM','10:00 PM','10:30 PM','11:00 PM','11:30 PM']},
+  school:{q:"Do you have school, college or work? What hours?",qr:['8 AM – 2 PM','9 AM – 3 PM','9 AM – 5 PM (work)','No school/work','Online classes']},
+  goal:{q:"What's your main goal right now? 🎯",qr:['😴 Better Sleep','📚 Focus & Study','💪 Fitness','🧘 Mental Peace','📵 Less Screen','🌟 Confidence']},
+  theme:{q:"Fun part! Pick a theme for your schedule 🎨",qr:['⚡ Harry Potter','🏜️ Dune','🎓 3 Idiots','💪 Brutal Grind','📖 Dark Academia','☁️ Soft Pastel','🎲 Random!','No theme']},
+  extra:{q:"Anything else? Hobbies, timing, or struggles?",qr:['Procrastination struggle','I love music 🎵','Tuition at 5 PM','Nothing extra, build it!']}
+};
+
+function addSMsg(role,html,isHTML=false){
+  const row=document.createElement('div');row.className='sm-row '+role;
+  const av=document.createElement('div');av.className='sm-av';av.textContent=role==='l'?'📅':'😊';
+  const bub=document.createElement('div');bub.className='sm-bub';
+  if(isHTML) bub.innerHTML=html; else bub.textContent=html;
+  if(role==='l'){row.appendChild(av);row.appendChild(bub);}else{row.appendChild(bub);row.appendChild(av);}
+  document.getElementById('schedMsgs').appendChild(row);document.getElementById('schedMsgs').scrollTop=99999;
+}
+function showSTyping(){
+  const row=document.createElement('div');row.className='sm-row l';row.id='styping';
+  const av=document.createElement('div');av.className='sm-av';av.textContent='📅';
+  const b=document.createElement('div');b.className='typing-dots';b.innerHTML='<div class="td"></div><div class="td"></div><div class="td"></div>';
+  row.appendChild(av);row.appendChild(b);document.getElementById('schedMsgs').appendChild(row);document.getElementById('schedMsgs').scrollTop=99999;
+}
+function rmSTyping(){const e=document.getElementById('styping');if(e)e.remove();}
+function setSQR(rs){
+  const c=document.getElementById('schedQR');c.innerHTML='';
+  rs.forEach(r=>{const b=document.createElement('button');b.className='sqr-btn';b.textContent=r;
+    b.onclick=()=>{document.getElementById('schedTxt').value=r;sendSched();};c.appendChild(b);});
+}
+function initSched(){
+  sStep=0;sData={};document.getElementById('schedMsgs').innerHTML='';document.getElementById('schedQR').innerHTML='';
+  setTimeout(()=>addSMsg('l',sQ.name.q),500);
+}
+async function sendSched(){
+  const inp=document.getElementById('schedTxt');
+  const txt=inp.value.trim();if(!txt) return;
+  inp.value='';document.getElementById('schedQR').innerHTML='';document.getElementById('schedGo').disabled=true;
+  addSMsg('u',txt);sData[sSteps[sStep]]=txt;sStep++;
+  if(sStep<sSteps.length){
+    setTimeout(()=>{
+      let q=sQ[sSteps[sStep]].q.replace('{name}',sData.name||'friend');
+      addSMsg('l',q);const qr=sQ[sSteps[sStep]].qr;if(qr.length)setSQR(qr);
+      document.getElementById('schedGo').disabled=false;
+    },500);
+  } else {
+    showSTyping();
+    setTimeout(()=>addSMsg('l','Building your schedule now ✨'),400);
+    try{
+      const theme=sData.theme||'',isRand=theme.toLowerCase().includes('random');
+      const tInstr=isRand?'Pick a completely random surprising theme from any book, movie, mythology or culture.':
+        (theme.toLowerCase().includes('no theme'))?'':
+        `Theme inspired by: "${theme.replace(/[⚡🏜️🎓💪📖☁️🎲]/g,'').trim()}" — use its world and vocabulary throughout.`;
+      const prompt=`Create a personalized daily schedule.
+Name:"${sData.name||'Friend'}", age:${sData.age}, wake:${sData.wake}, sleep:${sData.sleep}, school/work:${sData.school||'not mentioned'}, goal:${sData.goal}, extra:${sData.extra||'none'}. ${tInstr}
+Respond ONLY as valid JSON (no markdown):
+{"greeting":"<warm short greeting, themed>","theme_name":"<theme or Standard>","schedule":[{"time":"<H:MM AM/PM>","emoji":"<emoji>","activity":"<themed activity>","tip":"<short tip>"}]}
+10-14 blocks: morning, school/work, meals, exercise, study, evening, sleep prep. Language:${lang==='hi'?'Hindi':'English'}.`;
+      const raw=await callAI(prompt);
+      const sched=JSON.parse(raw);
+      window._lastSched=sched;
+      rmSTyping();addSMsg('l',"Done! Here's your schedule 🎉");
+      setTimeout(()=>addSMsg('l',buildSchedCard(sched),true),500);
+    }catch(e){
+      rmSTyping();addSMsg('l','Oops! Something went wrong 😅 Check your API key in the CONFIG at the top of the script. Try again!');
+      setTimeout(()=>initSched(),2000);
+    }
+    document.getElementById('schedGo').disabled=false;
+  }
+}
+function handleSKey(e){if(e.key==='Enter')sendSched();}
+
+function buildSchedCard(s){
+  return `<div class="sched-out">
+    ${s.theme_name&&s.theme_name!=='Standard'?`<div class="sched-theme">🎨 Theme: ${s.theme_name}</div>`:''}
+    <div class="sched-greeting">${s.greeting}</div>
+    ${s.schedule.map(b=>`<div class="sched-block"><div class="sched-time">${b.time}</div><div class="sched-act">${b.emoji} <strong>${b.activity}</strong> — ${b.tip}</div></div>`).join('')}
+    <div class="sched-dl">
+      <button class="sdl-btn sdl-html" onclick="dlSchedHTML()">⬇️ Download HTML</button>
+      <button class="sdl-btn sdl-txt" onclick="dlSchedTXT()">⬇️ Download TXT</button>
+    </div>
+    <button class="sched-reset" onclick="initSched()">🔄 Build a New Schedule</button>
+  </div>`;
+}
+function dlSchedHTML(){
+  const s=window._lastSched;if(!s) return;
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>My LL+ Schedule</title>
+<style>body{font-family:'Segoe UI',sans-serif;max-width:620px;margin:48px auto;padding:28px;background:#faf6ee;color:#0a0a0f;}h1{color:#3d7a5e;font-size:28px;margin-bottom:6px;}.theme{font-size:12px;color:#e85d3a;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:22px;}.greeting{background:#c8f0da;border-left:4px solid #5eab84;padding:16px 20px;border-radius:14px;margin-bottom:26px;font-size:16px;line-height:1.75;}.block{display:flex;gap:16px;align-items:flex-start;margin-bottom:18px;padding:14px 16px;background:#fff;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,.06);}.time{font-size:11px;font-weight:700;color:#e85d3a;text-transform:uppercase;letter-spacing:1px;min-width:78px;padding-top:2px;}.task strong{font-size:15px;color:#0a0a0f;}.task span{display:block;font-size:13px;color:#666;margin-top:3px;}footer{text-align:center;margin-top:40px;font-size:13px;color:#aaa;}</style></head><body>
+<h1>📅 My Daily Schedule</h1><div class="theme">${s.theme_name&&s.theme_name!=='Standard'?'🎨 '+s.theme_name:'LL+ Live Life Plus'}</div>
+<div class="greeting">${s.greeting}</div>
+${s.schedule.map(b=>`<div class="block"><div class="time">${b.time}</div><div class="task">${b.emoji} <strong>${b.activity}</strong><span>${b.tip}</span></div></div>`).join('')}
+<footer>Generated by LL+ Live Life Plus</footer></body></html>`;
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='LL+_Schedule.html';a.click();
+}
+function dlSchedTXT(){
+  const s=window._lastSched;if(!s) return;
+  const txt=`MY LL+ DAILY SCHEDULE\n${'='.repeat(28)}\n${s.theme_name&&s.theme_name!=='Standard'?'Theme: '+s.theme_name+'\n':''}\n${s.greeting}\n\n${s.schedule.map(b=>`${b.time}\n${b.emoji} ${b.activity}\n   → ${b.tip}`).join('\n\n')}\n\nBy LL+ Live Life Plus`;
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain'}));a.download='LL+_Schedule.txt';a.click();
+}
+
+// ════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════
+initLumi();
+initSched();
+</script>
+</body>
+</html>
+HTMLEOF
+echo "Written"
+
+
